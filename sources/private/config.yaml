@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-ingress-private-controller
+  namespace: kube-system
+  labels:
+    k8s-app: nginx-ingress-private-controller
+data:
+  hsts-include-subdomains: "false"
+  use-proxy-protocol: "true"
+  use-http2: "false"
+  server-tokens: "false"
+  variables-hash-bucket-size: "256"
+  server-name-hash-bucket-size: "256"
+  map-hash-bucket-size: "256"
+  enable-vts-status: "true"
+  worker-processes: "4"
+  large-client-header-buffers: "4 16k"
+  log-format-escape-json: "true"
+  log-format-upstream: '{ "timestamp": "$msec", "product": "platform", "application":
+    "private-ingress", "environment": "prod", "host": "$host", "level": 6, "log_type":
+    "ingress", "request-id": "$req_id", "short_message": "$status - $request$args",
+    "_remote_addr": "$remote_addr", "_proxy_protocol_addr":"$proxy_protocol_addr",
+    "_remote_user": "$remote_user", "_method": "$request_method",
+    "_status": "$status", "_request": "$request", "_request_time": "$request_time",
+    "_request_length": "$request_length", "_bytes_sent": "$bytes_sent",
+    "_request_query": "$args", "_server_protocol": "$server_protocol", "_path":
+    "$uri", "_http_referrer": "$http_referer", "_http_user_agent": "$http_user_agent"
+    }'
