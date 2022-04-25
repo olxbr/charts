@@ -3,12 +3,12 @@ entries:
   ingress-controller:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2022-04-25T08:31:53.529252-03:00"
+    created: "2022-04-25T09:46:29.574309-03:00"
     description: A Ingress Helm chart for Cops
-    digest: c4ddd99b56a5d249e4ab0c3f800235e918146404ff9978488613345c91744235
+    digest: 64d5458fc276c35a65377f5d7267d72f613ab91b6d62b818d1a95f3e4f9c6a4e
     name: ingress-controller
     type: application
     urls:
     - https://olxbr.github.io/charts/repo/stable/ingress-controller-0.0.1.tgz
     version: 0.0.1
-generated: "2022-04-25T08:31:53.526976-03:00"
+generated: "2022-04-25T09:46:29.572398-03:00"
