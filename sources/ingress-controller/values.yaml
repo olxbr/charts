@@ -1,0 +1,30 @@
+image:
+  repository: vivareal/nginx-ingress-controller
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.31.1"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+resources: 
+  limits:
+    cpu: 400m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+spec:
+  cluster:
+    name: "eks1"
+  replicas: 3
+  ingress: 
+    tier: "private"

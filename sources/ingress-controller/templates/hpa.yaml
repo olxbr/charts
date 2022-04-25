@@ -1,0 +1,30 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "ingress-controller.fullname" . }}
+  labels:
+    app: nginx-ingress
+    k8s-app: {{ include "ingress-controller.fullname" . }}
+    process: server
+    product: platform
+    tier: private
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "ingress-controller.fullname" . }}
+  minReplicas: 3
+  maxReplicas: 30
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 50

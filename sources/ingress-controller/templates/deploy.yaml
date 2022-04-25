@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ingress-controller.fullname" . }}
+  annotations:
+    prometheus.io/port: "10254"
+    prometheus.io/scrape: "true"
+  labels:
+    app: nginx-ingress
+    k8s-app: {{ include "ingress-controller.fullname" . }}
+    process: server
+    product: platform
+    tier: "{{ .Values.spec.ingress.tier }}"
+spec:
+  selector:
+    matchLabels:
+      app: nginx-ingress
+      k8s-app: {{ include "ingress-controller.fullname" . }}
+      process: server
+      product: platform
+      tier: "{{ .Values.spec.ingress.tier }}"
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+    type: RollingUpdate
+  replicas: {{ .Values.spec.replicas }}
+  template:
+    metadata:
+      labels:
+        app: nginx-ingress
+        k8s-app: {{ include "ingress-controller.fullname" . }}
+        process: server
+        product: platform
+        tier: "{{ .Values.spec.ingress.tier }}"
+    spec:
+      containers:
+      - name: {{ include "ingress-controller.fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        args:
+        - /nginx-ingress-controller
+        - --annotations-prefix=ingress.kubernetes.io
+        - --configmap=$(POD_NAMESPACE)/{{ include "ingress-controller.fullname" . }}
+        - --enable-ssl-chain-completion=false
+        - --enable-ssl-passthrough
+        - --ingress-class={{ .Values.spec.ingress.tier }}
+        - --publish-service=$(POD_NAMESPACE)/{{ include "ingress-controller.fullname" . }}
+        - --tcp-services-configmap=$(POD_NAMESPACE)/{{ include "ingress-controller.fullname" . }}-tcp-services
+        - --udp-services-configmap=$(POD_NAMESPACE)/{{ include "ingress-controller.fullname" . }}-udp-services
+        resources:
+          limits:
+            cpu: {{ .Values.resources.limits.cpu}}
+            memory: {{ .Values.resources.limits.memory}}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu}}
+            memory: {{ .Values.resources.requests.memory}}
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 10254
+            scheme: HTTP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 10254
+            scheme: HTTP
+          initialDelaySeconds: 10
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
+        - containerPort: 10254
+          name: metrics
+        - containerPort: 10180
+          name: nginx-status
+      serviceAccountName: {{ include "ingress-controller.fullname" . }}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60

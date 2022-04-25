@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ingress-controller.fullname" . }}-tcp-services
+  labels:
+    k8s-app: {{ include "ingress-controller.fullname" . }}
+data: {}

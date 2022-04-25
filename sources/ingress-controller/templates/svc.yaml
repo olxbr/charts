@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ingress-controller.fullname" . }}
+  labels:
+    k8s-app: {{ include "ingress-controller.fullname" . }}
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "True"
+    service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+    service.kubernetes.io/topology-aware-hints: 'auto'
+    {{if eq .Values.spec.ingress.tier "private"}}
+    service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+    {{end}}
+    external-dns.alpha.kubernetes.io/hostname: "ingress.{{ .Values.spec.ingress.tier }}.{{ .Values.spec.cluster.name }}.preprod.olxbr.cloud"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "10254"
+    prometheus.io/path: /metrics
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  - name: https
+    port: 443
+    targetPort: https
+  - name: metrics
+    port: 10254
+    targetPort: metrics
+  - name: nginx-status
+    port: 10180
+    targetPort: nginx-status
+  selector:
+    k8s-app: {{ include "ingress-controller.fullname" . }}
+  type: LoadBalancer
+
