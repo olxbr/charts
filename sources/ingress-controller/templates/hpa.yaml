@@ -14,7 +14,7 @@ spec:
     kind: Deployment
     name: {{ include "ingress-controller.fullname" . }}
   minReplicas: {{ .Values.spec.replicas  }}
-  maxReplicas: 30
+  maxReplicas: {{ .Values.spec.maxReplicas }}
 
 
 

@@ -11,7 +11,7 @@ metadata:
     {{if eq .Values.spec.ingress.tier "private"}}
     service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
     {{end}}
-    external-dns.alpha.kubernetes.io/hostname: "ingress.{{ .Values.spec.ingress.tier }}.{{ .Values.spec.cluster.name }}.preprod.olxbr.cloud"
+    external-dns.alpha.kubernetes.io/hostname: "ingress.{{ .Values.spec.ingress.tier }}.{{ .Values.spec.cluster.name }}.{{ .Values.spec.cluster.env }}.{{ .Values.spec.ingress.domain }}"
     prometheus.io/scrape: "true"
     prometheus.io/port: "10254"
     prometheus.io/path: /metrics

@@ -25,6 +25,9 @@ affinity: {}
 spec:
   cluster:
     name: "eks1"
+    env: ""
   replicas: 3
+  maxReplicas: 30
   ingress: 
     tier: "private"
+    domain: "olxbr.cloud"
