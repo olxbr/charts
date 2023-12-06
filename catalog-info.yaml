@@ -1,0 +1,26 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "charts"
+  description: "All helm charts for installation in Kubernetes clusters."
+  annotations:
+    github.com/project-slug: 'olxbr/charts'
+    backstage.io/techdocs-ref: dir:.
+    graph.microsoft.com/group-id: 7dd35c4f-18e4-4b49-b833-5b044b1013fc
+    teams.olxbr.io/cloud-cost-center: dc827067-99d5-4357-b6fc-2d24b5c27a44
+    olxbr.io/critical: 'false'
+    olxbr.io/dora: Foundation
+    sonarqube.org/project-key: olxbr_charts
+    olxbr.io/bcp-ready: 'false'
+  tags:
+    - do-foundation
+    - dj-foundation
+  links:
+    - url: 'https://olxbrasil.slack.com/archives/C01GCDSDPSM'
+      title: '#slack-channel'
+      icon: chat
+      type: api
+spec:
+  type: service
+  owner: group:default/squad-cross-foundation
+  lifecycle: production
